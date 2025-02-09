@@ -7,16 +7,16 @@ const RegisterBeasiswa = () => {
   const [formData, setFormData] = useState({
     ipk: "",
     semester: "",
-    suratAktif: null,
+    suratAktif: null as File | null,
     ukt: "",
-    suratPermohonan: null,
-    suratKeterangan: null,
+    suratPermohonan: null as File | null,
+    suratKeterangan: null as File | null,
   })
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
   const navigate = useNavigate()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value, files } = e.target
+    const { name, value, files } = e.target as HTMLInputElement
     if (files) {
       setFormData({
         ...formData,
@@ -32,16 +32,20 @@ const RegisterBeasiswa = () => {
 
   const validate = () => {
     const newErrors: { [key: string]: string } = {}
-    if (!formData.ipk || isNaN(formData.ipk) || formData.ipk < 0 || formData.ipk > 4) {
+    const ipk = parseFloat(formData.ipk)
+    const semester = parseInt(formData.semester)
+    const ukt = parseFloat(formData.ukt)
+
+    if (isNaN(ipk) || ipk < 0 || ipk > 4) {
       newErrors.ipk = "IPK harus berupa angka antara 0 dan 4"
     }
-    if (!formData.semester || isNaN(formData.semester) || formData.semester <= 0) {
+    if (isNaN(semester) || semester <= 0) {
       newErrors.semester = "Semester harus berupa angka positif"
     }
     if (!formData.suratAktif) {
       newErrors.suratAktif = "Surat Aktif wajib diunggah"
     }
-    if (!formData.ukt || isNaN(formData.ukt) || formData.ukt <= 0) {
+    if (isNaN(ukt) || ukt <= 0) {
       newErrors.ukt = "UKT harus berupa angka positif"
     }
     if (!formData.suratPermohonan) {

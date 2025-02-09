@@ -1,15 +1,27 @@
-import { useState } from "react"
+import { useState, ChangeEvent, FormEvent } from "react"
 import Layout from "../../components/layout"
 
+interface FormData {
+  nama_lengkap: string;
+  email: string;
+  password: string;
+}
+
+interface Errors {
+  nama_lengkap?: string;
+  email?: string;
+  password?: string;
+}
+
 const PerbaruiInformasi = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     nama_lengkap: "",
     email: "",
     password: "",
   })
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors] = useState<Errors>({})
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData({
       ...formData,
@@ -18,7 +30,7 @@ const PerbaruiInformasi = () => {
   }
 
   const validate = () => {
-    const newErrors = {}
+    const newErrors: Errors = {}
     if (!formData.nama_lengkap) {
       newErrors.nama_lengkap = "Nama lengkap wajib diisi"
     }
@@ -34,7 +46,7 @@ const PerbaruiInformasi = () => {
     return Object.keys(newErrors).length === 0
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (validate()) {
       // Here you would typically send the form data to your backend
